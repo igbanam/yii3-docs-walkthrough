@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Yiisoft\Yii\View\ViewRenderer;
+use App\Form\EchoForm;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Yiisoft\Http\Method;
+use Yiisoft\Validator\Validator;
+use Yiisoft\Yii\View\ViewRenderer;
 
 class EchoController {
     private ViewRenderer $viewRenderer;
@@ -16,12 +19,17 @@ class EchoController {
         $this->viewRenderer = $viewRenderer->withControllerName('echo');
     }
 
-    public function say(ServerRequestInterface $request): ResponseInterface
+    public function say(ServerRequestInterface $request, Validator $validator): ResponseInterface
     {
-        $message = $request->getAttribute('message', 'Hello!');
+        $form = new EchoForm();
+
+        if ($request->getMethod() === Method::POST) {
+            $form->load($request->getParsedBody());
+            $validator->validate($form);
+        }
 
         return $this->viewRenderer->render('say', [
-            'message' => $message,
+            'form' => $form,
         ]);
     }
 }

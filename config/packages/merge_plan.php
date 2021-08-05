@@ -39,10 +39,10 @@ return [
             'yiisoft/aliases' => [
                 'common.php',
             ],
-            'yiisoft/router' => [
+            'yiisoft/validator' => [
                 'common.php',
             ],
-            'yiisoft/validator' => [
+            'yiisoft/router' => [
                 'common.php',
             ],
         ],
